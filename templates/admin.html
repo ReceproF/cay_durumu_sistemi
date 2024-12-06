@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Yönetici Paneli</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin-top: 50px;
+        }
+
+        form {
+            margin: 20px;
+        }
+
+        select {
+            padding: 8px;
+            font-size: 16px;
+            margin-bottom: 20px;
+        }
+
+        button {
+            padding: 10px;
+            font-size: 18px;
+            background-color: #76c7c0;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #5fa59c;
+        }
+    </style>
+</head>
+<body>
+    <h1>Yönetici Paneli</h1>
+
+    <h2>Çayın Durumunu Güncelle</h2>
+
+    <form action="/update" method="POST">
+        <label for="durum">Çay Durumu:</label><br>
+        <select name="durum" id="durum">
+            <option value="Çay Hazır">Çay Hazır</option>
+            <option value="Çay Hazır Değil">Çay Hazır Değil</option>
+        </select><br><br>
+
+        <label for="kaynamasüresi">Suyun Durumu:</label><br>
+        <select name="kaynamasüresi" id="kaynamasüresi">
+            <option value="">Seçiniz</option>
+            <option value="5">5 Dakika</option>
+            <option value="10">10 Dakika</option>
+            <option value="15">15 Dakika</option>
+            <option value="20">20 Dakika</option>
+        </select><br><br>
+
+        <button type="submit">Güncelle</button>
+    </form>
+
+    <p><a href="/">Anasayfaya Dön</a></p>
+</body>
+</html>

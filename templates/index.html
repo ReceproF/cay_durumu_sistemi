@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Çay Durumu</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin-top: 50px;
+        }
+
+        .button {
+            padding: 10px;
+            font-size: 18px;
+            margin-top: 20px;
+        }
+
+        .status {
+            padding: 20px;
+            font-size: 24px;
+            margin-top: 30px;
+            border-radius: 10px;
+        }
+
+        .hazir {
+            background-color: #76c7c0;
+            color: white;
+        }
+
+        .degil {
+            background-color: #c4c4c4;
+            color: #333;
+        }
+
+        #sayaç {
+            font-size: 22px;
+            margin-top: 30px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Çay Durumu</h1>
+
+    <!-- Çay durumu gösterimi -->
+    <div class="status {% if durum == 'Çay Hazır' %}hazir{% else %}degil{% endif %}">
+        <h2>{{ durum }}</h2>
+    </div>
+
+    <!-- Yönetici paneline yönlendirme butonu -->
+    <form action="/admin" method="GET">
+        <button class="button" type="submit">Yönetici Paneline Git</button>
+    </form>
+
+    <!-- Kaynama süresi varsa, sayaç göstergesi -->
+    {% if kaynama_suresi %}
+        <div id="sayaç">
+            <h3>Kaynama Süresi: {{ kaynama_suresi }} Dakika</h3>
+            <p>Geride kalan süre: <span id="dakika">{{ kaynama_suresi }}</span> dakika</p>
+        </div>
+    {% endif %}
+
+    <script>
+        // Eğer kaynama süresi varsa, sayaç başlasın
+        {% if kaynama_suresi %}
+        let dakika = {{ kaynama_suresi }};
+        let sayaçIntervali = setInterval(function() {
+            dakika--;
+            document.getElementById("dakika").innerText = dakika;
+
+            if (dakika <= 0) {
+                clearInterval(sayaçIntervali);
+                document.getElementById("dakika").innerText = "Kaynadı!";
+            }
+        }, 60000); // 1 dakika aralıklarla
+        {% endif %}
+    </script>
+</body>
+</html>
