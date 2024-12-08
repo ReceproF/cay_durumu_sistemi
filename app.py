@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify, render_template    //Bismillahirrahmanirrahim
+from flask import Flask, request, jsonify, render_template    <!-- Bismillahirrahmanirrahim -->
 
 app = Flask(__name__)
 
