@@ -1,4 +1,5 @@
-from flask import Flask, request, jsonify, render_template   
+import os
+from flask import Flask, request, jsonify, render_template
 
 app = Flask(__name__)
 
@@ -58,4 +59,6 @@ def decrease_timer():
     return jsonify({"water_timer": water_timer})
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    # Heroku ortamında PORT çevresel değişkenini kullanıyoruz
+    port = int(os.environ.get('PORT', 5000))  # Yerel ortamda 5000, Heroku'da ise belirtilen PORT
+    app.run(host='0.0.0.0', port=port)  # Heroku'nun portunu ve herkese açık IP'yi dinliyoruz
