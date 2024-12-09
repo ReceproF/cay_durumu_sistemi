@@ -1,61 +1,57 @@
-from flask import Flask, request, jsonify, render_template   
+from flask import Flask, render_template, request, jsonify
+import time
 
 app = Flask(__name__)
 
-# Global Variables
-tea_ready = False
-water_timer = 0
-tea_stock = "10"
-tea_times = "10:00, 14:00, 16:00"
-tea_money = "50 TL - 01.01.2024"
+# Çay ve su durumu için global değişkenler
+data = {
+    "cay_durumu": "Çay Hazır Değil",
+    "su_durumu": "Su Hazır Değil",
+    "cay_sayaci": 0,
+    "su_sayaci": 0,
+    "mevcut_cay": "10",
+    "cay_saatleri": "",
+    "cay_para_tarihi": ""
+}
 
-@app.route('/')
+@app.route("/")
 def index():
-    global tea_ready, water_timer, tea_stock, tea_times, tea_money
-    return render_template('index.html', tea_ready=tea_ready, water_timer=water_timer,
-                           tea_stock=tea_stock, tea_times=tea_times, tea_money=tea_money)
+    return render_template("index.html", data=data)
 
-@app.route('/admin')
+@app.route("/admin")
 def admin():
-    return render_template('admin.html')
+    return render_template("admin.html", data=data)
 
-@app.route('/status', methods=['GET'])
-def get_status():
-    global tea_ready, water_timer, tea_stock, tea_times, tea_money
-    return jsonify({
-        "tea_ready": tea_ready,
-        "water_timer": water_timer,
-        "tea_stock": tea_stock,
-        "tea_times": tea_times,
-        "tea_money": tea_money
-    })
+@app.route("/update", methods=["POST"])
+def update():
+    key = request.json.get("key")
+    value = request.json.get("value")
+    if key in data:
+        data[key] = value
+        return jsonify({"success": True})
+    return jsonify({"success": False}), 400
 
-@app.route('/update-status', methods=['POST'])
-def update_tea_status():
-    global tea_ready
-    tea_ready = request.json['tea_ready']
-    return jsonify({"message": "Çay durumu güncellendi!"})
+@app.route("/start_timer", methods=["POST"])
+def start_timer():
+    timer_type = request.json.get("type")
+    duration = int(request.json.get("duration", 0))
+    if timer_type == "su":
+        data["su_sayaci"] = duration
+    elif timer_type == "cay":
+        data["cay_sayaci"] = duration
+    return jsonify({"success": True})
 
-@app.route('/update-water-status', methods=['POST'])
-def update_water_status():
-    global water_timer
-    water_timer = request.json['water_timer']
-    return jsonify({"message": "Su kaynama durumu güncellendi!"})
-
-@app.route('/update-footer', methods=['POST'])
-def update_footer():
-    global tea_stock, tea_times, tea_money
-    tea_stock = request.json['tea_stock']
-    tea_times = request.json['tea_times']
-    tea_money = request.json['tea_money']
-    return jsonify({"message": "Alt kısım bilgileri güncellendi!"})
-
-@app.route('/decrease-timer', methods=['POST'])
+@app.route("/decrease_timer", methods=["POST"])
 def decrease_timer():
-    global water_timer
-    if water_timer > 0:
-        water_timer -= 1
-    return jsonify({"water_timer": water_timer})
+    for timer in ["su_sayaci", "cay_sayaci"]:
+        if data[timer] > 0:
+            data[timer] -= 1
+            if data[timer] == 0:
+                if timer == "su_sayaci":
+                    data["su_durumu"] = "Su Hazır!"
+                elif timer == "cay_sayaci":
+                    data["cay_durumu"] = "Çay Hazır!"
+    return jsonify(data)
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     app.run(debug=True)
