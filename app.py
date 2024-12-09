@@ -1,127 +1,61 @@
-<!DOCTYPE html>
-<html lang="tr">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Paneli</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        .header {
-            background-color: #FF5722;
-            color: white;
-            padding: 20px;
-            text-align: center;
-            font-size: 2em;
-        }
-        .container {
-            padding: 20px;
-            display: flex;
-            flex-direction: column;
-            gap: 30px;
-        }
-        .section {
-            background-color: #F5F5F5;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.2);
-        }
-        h2 {
-            margin-bottom: 10px;
-            font-size: 1.5em;
-        }
-        button {
-            font-size: 1em;
-            padding: 10px;
-            margin: 5px;
-            border: none;
-            cursor: pointer;
-        }
-        .green-button {
-            background-color: #4CAF50;
-            color: white;
-        }
-        .grey-button {
-            background-color: #9E9E9E;
-            color: white;
-        }
-        .water-button {
-            background-color: #E0E0E0;
-            color: #333;
-        }
-        .water-button.active {
-            background-color: #4CAF50;
-            color: white;
-        }
-        input {
-            font-size: 1em;
-            padding: 10px;
-            margin: 5px;
-        }
-    </style>
-</head>
-<body>
-    <div class="header">Admin Paneli</div>
-    <div class="container">
-        <div class="section">
-            <h2>Çay Durumu Yönetimi:</h2>
-            <button class="green-button" onclick="updateTeaStatus(true)">Çayı Hazır Yap</button>
-            <button class="grey-button" onclick="updateTeaStatus(false)">Çayı Hazır Yapma</button>
-        </div>
-        <div class="section">
-            <h2>Su Durumu Yönetimi:</h2>
-            <button class="water-button active" onclick="updateWaterTimer(0)">Su Hazır</button>
-            <button class="water-button" onclick="updateWaterTimer(5)">5 Dakika</button>
-            <button class="water-button" onclick="updateWaterTimer(10)">10 Dakika</button>
-            <button class="water-button" onclick="updateWaterTimer(15)">15 Dakika</button>
-            <button class="water-button" onclick="updateWaterTimer(20)">20 Dakika</button>
-        </div>
-        <div class="section">
-            <h2>Alt Kısım Yönetimi:</h2>
-            <label>Mevcut Paket Çay:</label>
-            <input type="number" id="tea-stock-input" placeholder="10">
-            <label>Muhtemel Çay Saatleri:</label>
-            <input type="text" id="tea-times-input" placeholder="10:00, 14:00, 16:00">
-            <label>Çay İçin Toplanan Para ve Tarihi:</label>
-            <input type="text" id="tea-money-input" placeholder="50 TL - 01.01.2024">
-            <button onclick="updateFooter()">Güncelle</button>
-        </div>
-    </div>
-    <script>
-        async function updateTeaStatus(isReady) {
-            await fetch('/update-status', { 
-                method: 'POST', 
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ tea_ready: isReady })
-            });
-            alert("Çay durumu güncellendi!");
-        }
+from flask import Flask, request, jsonify, render_template   
 
-        async function updateWaterTimer(minutes) {
-            await fetch('/update-water-status', { 
-                method: 'POST', 
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ water_timer: minutes })
-            });
-            alert("Su kaynama süresi güncellendi!");
-        }
+app = Flask(__name__)
 
-        async function updateFooter() {
-            const teaStock = document.getElementById('tea-stock-input').value;
-            const teaTimes = document.getElementById('tea-times-input').value;
-            const teaMoney = document.getElementById('tea-money-input').value;
+# Global Variables
+tea_ready = False
+water_timer = 0
+tea_stock = "10"
+tea_times = "10:00, 14:00, 16:00"
+tea_money = "50 TL - 01.01.2024"
 
-            await fetch('/update-footer', { 
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ tea_stock: teaStock, tea_times: teaTimes, tea_money: teaMoney })
-            });
-            alert("Alt kısım bilgileri güncellendi!");
-        }
-    </script>
-</body>
-</html>
+@app.route('/')
+def index():
+    global tea_ready, water_timer, tea_stock, tea_times, tea_money
+    return render_template('index.html', tea_ready=tea_ready, water_timer=water_timer,
+                           tea_stock=tea_stock, tea_times=tea_times, tea_money=tea_money)
+
+@app.route('/admin')
+def admin():
+    return render_template('admin.html')
+
+@app.route('/status', methods=['GET'])
+def get_status():
+    global tea_ready, water_timer, tea_stock, tea_times, tea_money
+    return jsonify({
+        "tea_ready": tea_ready,
+        "water_timer": water_timer,
+        "tea_stock": tea_stock,
+        "tea_times": tea_times,
+        "tea_money": tea_money
+    })
+
+@app.route('/update-status', methods=['POST'])
+def update_tea_status():
+    global tea_ready
+    tea_ready = request.json['tea_ready']
+    return jsonify({"message": "Çay durumu güncellendi!"})
+
+@app.route('/update-water-status', methods=['POST'])
+def update_water_status():
+    global water_timer
+    water_timer = request.json['water_timer']
+    return jsonify({"message": "Su kaynama durumu güncellendi!"})
+
+@app.route('/update-footer', methods=['POST'])
+def update_footer():
+    global tea_stock, tea_times, tea_money
+    tea_stock = request.json['tea_stock']
+    tea_times = request.json['tea_times']
+    tea_money = request.json['tea_money']
+    return jsonify({"message": "Alt kısım bilgileri güncellendi!"})
+
+@app.route('/decrease-timer', methods=['POST'])
+def decrease_timer():
+    global water_timer
+    if water_timer > 0:
+        water_timer -= 1
+    return jsonify({"water_timer": water_timer})
+
+if __name__ == '__main__':
+    app.run(debug=True)
