@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="tr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,117 +7,120 @@
     <style>
         body {
             font-family: Arial, sans-serif;
-            background-color: #f8f9fa;
             margin: 0;
             padding: 0;
+            box-sizing: border-box;
         }
         .header {
-            background-color: #007bff;
+            background-color: #FF5722;
             color: white;
-            text-align: center;
-            padding: 15px 0;
-        }
-        .content {
             padding: 20px;
+            text-align: center;
+            font-size: 2em;
+        }
+        .container {
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
         }
         .section {
-            margin-bottom: 20px;
+            background-color: #F5F5F5;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.2);
         }
-        .section h2 {
-            background-color: #007bff;
-            color: white;
+        h2 {
+            margin-bottom: 10px;
+            font-size: 1.5em;
+        }
+        button {
+            font-size: 1em;
             padding: 10px;
-            border-radius: 5px;
-        }
-        .button-group button {
             margin: 5px;
-            padding: 10px 15px;
             border: none;
-            border-radius: 5px;
             cursor: pointer;
         }
-        .button-group .green {
-            background-color: #28a745;
+        .green-button {
+            background-color: #4CAF50;
             color: white;
         }
-        .button-group .gray {
-            background-color: #6c757d;
+        .grey-button {
+            background-color: #9E9E9E;
             color: white;
         }
-        .button-group .blue {
-            background-color: #007bff;
+        .water-button {
+            background-color: #E0E0E0;
+            color: #333;
+        }
+        .water-button.active {
+            background-color: #4CAF50;
             color: white;
+        }
+        input {
+            font-size: 1em;
+            padding: 10px;
+            margin: 5px;
         }
     </style>
 </head>
 <body>
-    <div class="header">
-        <h1>Admin Paneli</h1>
-    </div>
-    <div class="content">
+    <div class="header">Admin Paneli</div>
+    <div class="container">
         <div class="section">
-            <h2>Çay Durumu Yönetimi</h2>
-            <div class="button-group">
-                <button onclick="updateTeaStatus('ready')" class="green">Çayı Hazır Yap</button>
-                <button onclick="updateTeaStatus('not_ready')" class="gray">Çay Hazır Değil</button>
-                <button onclick="updateTeaStatus('almost_done')" class="blue">Çay Bitmek Üzere..</button>
-                <button onclick="updateTeaStatus('finished')" class="gray">Çay Bitti</button>
-            </div>
-            <div>
-                <button onclick="adjustTeaTimer(-5)">-5 Dakika</button>
-                <span id="tea-timer">0 Dakika</span>
-                <button onclick="adjustTeaTimer(5)">+5 Dakika</button>
-            </div>
+            <h2>Çay Durumu Yönetimi:</h2>
+            <button class="green-button" onclick="updateTeaStatus(true)">Çayı Hazır Yap</button>
+            <button class="grey-button" onclick="updateTeaStatus(false)">Çayı Hazır Yapma</button>
         </div>
         <div class="section">
-            <h2>Su Durumu Yönetimi</h2>
-            <div class="button-group">
-                <button onclick="updateWaterStatus('ready')" class="green">Su Hazır</button>
-                <button onclick="adjustWaterTimer(-5)">-5 Dakika</button>
-                <span id="water-timer">0 Dakika</span>
-                <button onclick="adjustWaterTimer(5)">+5 Dakika</button>
-            </div>
+            <h2>Su Durumu Yönetimi:</h2>
+            <button class="water-button active" onclick="updateWaterTimer(0)">Su Hazır</button>
+            <button class="water-button" onclick="updateWaterTimer(5)">5 Dakika</button>
+            <button class="water-button" onclick="updateWaterTimer(10)">10 Dakika</button>
+            <button class="water-button" onclick="updateWaterTimer(15)">15 Dakika</button>
+            <button class="water-button" onclick="updateWaterTimer(20)">20 Dakika</button>
+        </div>
+        <div class="section">
+            <h2>Alt Kısım Yönetimi:</h2>
+            <label>Mevcut Paket Çay:</label>
+            <input type="number" id="tea-stock-input" placeholder="10">
+            <label>Muhtemel Çay Saatleri:</label>
+            <input type="text" id="tea-times-input" placeholder="10:00, 14:00, 16:00">
+            <label>Çay İçin Toplanan Para ve Tarihi:</label>
+            <input type="text" id="tea-money-input" placeholder="50 TL - 01.01.2024">
+            <button onclick="updateFooter()">Güncelle</button>
         </div>
     </div>
-
     <script>
-        let teaTimer = 0;
-        let waterTimer = 0;
-
-        function updateTeaStatus(status) {
-            fetch('/update-tea-status', {
-                method: 'POST',
+        async function updateTeaStatus(isReady) {
+            await fetch('/update-status', { 
+                method: 'POST', 
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ status })
-            }).then(() => alert('Çay durumu güncellendi.'));
-        }
-
-        function adjustTeaTimer(amount) {
-            teaTimer = Math.max(0, teaTimer + amount);
-            document.getElementById('tea-timer').innerText = `${teaTimer} Dakika`;
-            fetch('/update-tea-timer', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ timer: teaTimer })
+                body: JSON.stringify({ tea_ready: isReady })
             });
+            alert("Çay durumu güncellendi!");
         }
 
-        function updateWaterStatus(status) {
-            fetch('/update-water-status', {
-                method: 'POST',
+        async function updateWaterTimer(minutes) {
+            await fetch('/update-water-status', { 
+                method: 'POST', 
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ status })
-            }).then(() => alert('Su durumu güncellendi.'));
-        }
-
-        function adjustWaterTimer(amount) {
-            waterTimer = Math.max(0, waterTimer + amount);
-            document.getElementById('water-timer').innerText = `${waterTimer} Dakika`;
-            fetch('/update-water-timer', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ timer: waterTimer })
+                body: JSON.stringify({ water_timer: minutes })
             });
+            alert("Su kaynama süresi güncellendi!");
+        }
+
+        async function updateFooter() {
+            const teaStock = document.getElementById('tea-stock-input').value;
+            const teaTimes = document.getElementById('tea-times-input').value;
+            const teaMoney = document.getElementById('tea-money-input').value;
+
+            await fetch('/update-footer', { 
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ tea_stock: teaStock, tea_times: teaTimes, tea_money: teaMoney })
+            });
+            alert("Alt kısım bilgileri güncellendi!");
         }
     </script>
 </body>
