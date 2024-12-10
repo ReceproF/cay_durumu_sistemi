@@ -1,64 +1,42 @@
-import os
-from flask import Flask, request, jsonify, render_template
+from flask import Flask, jsonify, request
+import json
 
 app = Flask(__name__)
 
-# Global Variables (sunucu tarafında tutulan veriler)
-tea_ready = "Çay Hazır Değil"
-water_timer = 0
-tea_stock = "10"
-tea_times = "10:00, 14:00, 16:00"
-tea_money = "50 TL - 01.01.2024"
+# Verileri saklayacak dosya
+data_file = 'data.json'
 
-@app.route('/')
-def index():
-    global tea_ready, water_timer, tea_stock, tea_times, tea_money
-    return render_template('index.html', tea_ready=tea_ready, water_timer=water_timer,
-                           tea_stock=tea_stock, tea_times=tea_times, tea_money=tea_money)
+# Başlangıçta verileri yükle
+def load_data():
+    try:
+        with open(data_file, 'r') as file:
+            return json.load(file)
+    except FileNotFoundError:
+        return {
+            "tea_status": "Çay değil",
+            "water_status": "Su yok",
+            "tea_packages": "0",
+            "tea_times": "Bilgi yok",
+            "tea_cost_date": "Bilgi yok"
+        }
 
-@app.route('/admin')
-def admin():
-    return render_template('admin.html')
+# Verileri kaydet
+def save_data(data):
+    with open(data_file, 'w') as file:
+        json.dump(data, file)
 
-@app.route('/status', methods=['GET'])
-def get_status():
-    global tea_ready, water_timer, tea_stock, tea_times, tea_money
-    return jsonify({
-        "tea_ready": tea_ready,
-        "water_timer": water_timer,
-        "tea_stock": tea_stock,
-        "tea_times": tea_times,
-        "tea_money": tea_money
-    })
+# API ile verileri gönderme
+@app.route('/api/get_data', methods=['GET'])
+def get_data():
+    data = load_data()
+    return jsonify(data)
 
-@app.route('/update-status', methods=['POST'])
-def update_tea_status():
-    global tea_ready
-    tea_ready = request.json['tea_ready']
-    return jsonify({"message": "Çay durumu güncellendi!"})
-
-@app.route('/update-water-status', methods=['POST'])
-def update_water_status():
-    global water_timer
-    water_timer = request.json['water_timer']
-    return jsonify({"message": "Su kaynama durumu güncellendi!"})
-
-@app.route('/update-footer', methods=['POST'])
-def update_footer():
-    global tea_stock, tea_times, tea_money
-    tea_stock = request.json['tea_stock']
-    tea_times = request.json['tea_times']
-    tea_money = request.json['tea_money']
-    return jsonify({"message": "Alt kısım bilgileri güncellendi!"})
-
-@app.route('/decrease-timer', methods=['POST'])
-def decrease_timer():
-    global water_timer
-    if water_timer > 0:
-        water_timer -= 1
-    return jsonify({"water_timer": water_timer})
+# Admin paneli ile verileri güncelleme
+@app.route('/api/update_data', methods=['POST'])
+def update_data():
+    new_data = request.json
+    save_data(new_data)
+    return jsonify({"message": "Veriler güncellendi!"}), 200
 
 if __name__ == '__main__':
-    # Heroku ortamında PORT çevresel değişkenini kullanıyoruz
-    port = int(os.environ.get('PORT', 5000))  # Yerel ortamda 5000, Heroku'da ise belirtilen PORT
-    app.run(host='0.0.0.0', port=port)  # Heroku'nun portunu ve herkese açık IP'yi dinliyoruz
+    app.run(debug=True)
