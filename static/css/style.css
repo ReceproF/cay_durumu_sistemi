@@ -1,3 +1,4 @@
+/* Ana Stiller */
 body {
     font-family: Arial, sans-serif;
     margin: 0;
@@ -10,25 +11,27 @@ body {
 }
 
 .container {
+    width: 90%;
+    max-width: 1200px;
     text-align: center;
     background: #fff;
     padding: 20px;
     border-radius: 10px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    max-width: 500px;
-    width: 100%;
 }
 
-h1 {
+/* Üst Bölüm */
+.top-section {
+    display: flex;
+    justify-content: space-around;
     margin-bottom: 20px;
-    color: #333;
 }
 
 .status-box {
-    margin: 20px 0;
+    flex: 1;
+    margin: 10px;
     padding: 15px;
     border-radius: 10px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     background-color: #f9f9f9;
     transition: background-color 0.3s;
 }
@@ -41,29 +44,21 @@ h1 {
     background-color: #f8d7da;
 }
 
-.status-box h2 {
+/* Alt Bölüm */
+.bottom-section {
+    display: flex;
+    justify-content: space-between;
+}
+
+.info-box {
+    flex: 1;
+    margin: 10px;
+    padding: 15px;
+    border-radius: 10px;
+    border: 1px solid #ccc;
+    background-color: #f4f4f4;
+}
+
+.info-box h3 {
     margin-bottom: 10px;
-}
-
-button {
-    margin: 5px;
-    padding: 10px 15px;
-    background: #007bff;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: 0.3s;
-}
-
-button:hover {
-    background: #0056b3;
-}
-
-.timer-buttons button {
-    background: #28a745;
-}
-
-.timer-buttons button:hover {
-    background: #1e7e34;
 }
