@@ -1,10 +1,91 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    ...
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Çay Durumu</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f8f9fa;
+        }
+        .header {
+            background-color: #007bff; 
+            color: white;
+            text-align: center;
+            padding: 15px 0;
+        }
+        .content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 70vh;
+        }
+        .status-box {
+            border: 2px solid #007bff;
+            border-radius: 10px;
+            padding: 10px;
+            margin: 10px;
+            text-align: center;
+            width: 40%;
+            background-color: #e9ecef;
+        }
+        .status-box.green {
+            background-color: #d4edda; /* Çay hazır: yeşil */
+            color: #155724;
+        }
+        .status-box.red {
+            background-color: #f8d7da; /* Çay hazır değil: kırmızı */
+            color: #721c24;
+        }
+        .footer {
+            display: flex;
+            justify-content: space-around;
+            padding: 10px 0;
+            background-color: #f1f1f1;
+        }
+        .footer-box {
+            text-align: center;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            width: 30%;
+        }
+    </style>
 </head>
 <body>
-    ...
+    <div class="header">
+        <h1>Çay Durumu Sistemi</h1>
+    </div>
+    <div class="content">
+        <div id="tea-box" class="status-box red">
+            <h2>Çayın Durumu:</h2>
+            <p id="tea-status">Çay Hazır Değil!</p>
+            <p id="tea-timer">Kaynamasına (dakika):</p>
+        </div>
+        <div class="status-box">
+            <h2>Suyun Durumu:</h2>
+            <p id="water-status">Kaynamasına (dakika):</p>
+        </div>
+    </div>
+    <div class="footer">
+        <div class="footer-box">
+            <h3>Mevcut Paket Çay:</h3>
+            <p id="tea-stock">10</p>
+        </div>
+        <div class="footer-box">
+            <h3>Muhtemel Çay Saatleri:</h3>
+            <p id="tea-times">10:00, 14:00, 16:00</p>
+        </div>
+        <div class="footer-box">
+            <h3>Çay İçin Toplanan Para ve Tarihi:</h3>
+            <p id="tea-money">50 TL - 01.01.2024</p>
+        </div>
+    </div>
+
     <script>
         async function fetchStatus() {
             try {
@@ -13,19 +94,26 @@
                 
                 // Çayın durumu
                 const teaBox = document.getElementById('tea-box');
-                if (data.tea_ready) {
-                    teaBox.classList.remove('gray');
+                if (data.tea_status === "Çay Hazır") {
+                    teaBox.classList.remove('red');
                     teaBox.classList.add('green');
-                    document.getElementById('tea-status').innerText = "Çay Hazır!";
+                    document.getElementById('tea-status').innerText = data.tea_status;
                 } else {
                     teaBox.classList.remove('green');
-                    teaBox.classList.add('gray');
-                    document.getElementById('tea-status').innerText = "Çay Hazır Değil!";
+                    teaBox.classList.add('red');
+                    document.getElementById('tea-status').innerText = data.tea_status;
+                }
+
+                // Çay sayaç
+                if (data.tea_timer > 0) {
+                    document.getElementById('tea-timer').innerText = `Çayın olmasına ${data.tea_timer} dakika kaldı.`;
+                } else {
+                    document.getElementById('tea-timer').innerText = "";
                 }
 
                 // Suyun durumu
                 if (data.water_timer > 0) {
-                    document.getElementById('water-status').innerText = `${data.water_timer} Dakika`;
+                    document.getElementById('water-status').innerText = `Kaynamasına ${data.water_timer} dakika kaldı.`;
                 } else {
                     document.getElementById('water-status').innerText = "Su Hazır!";
                 }
