@@ -9,6 +9,7 @@
 <body>
     <div class="container">
         <h1>Yönetim Paneli</h1>
+
         <div class="admin-section">
             <h2>Çay Durumu</h2>
             <button onclick="setTeaStatus('Çay Hazır!', 0)">Çay Hazır!</button>
@@ -20,17 +21,36 @@
                 <button onclick="setTeaTimer(10)">10 Dakika</button>
                 <button onclick="setTeaTimer(15)">15 Dakika</button>
                 <button onclick="setTeaTimer(20)">20 Dakika</button>
+                <button onclick="setTeaTimer(25)">25 Dakika</button>
+                <button onclick="setTeaTimer(30)">30 Dakika</button>
             </div>
         </div>
+
         <div class="admin-section">
             <h2>Su Durumu</h2>
             <button onclick="setWaterStatus('Su Hazır!', 0)">Su Hazır!</button>
+            <button onclick="setWaterStatus('Su Hazır Değil!', 0)">Su Hazır Değil!</button>
             <div class="timer-buttons">
                 <button onclick="setWaterTimer(5)">5 Dakika</button>
                 <button onclick="setWaterTimer(10)">10 Dakika</button>
                 <button onclick="setWaterTimer(15)">15 Dakika</button>
                 <button onclick="setWaterTimer(20)">20 Dakika</button>
             </div>
+        </div>
+
+        <div class="admin-section">
+            <h2>Ek Bilgiler</h2>
+            <label for="tea-packages">Mevcut Çay Paket Sayısı:</label>
+            <input type="text" id="tea-packages" placeholder="Paket sayısı">
+            <button onclick="updateTeaPackages()">Güncelle</button>
+
+            <label for="tea-times">Muhtemel Çay Saatleri:</label>
+            <input type="text" id="tea-times" placeholder="Saatler">
+            <button onclick="updateTeaTimes()">Güncelle</button>
+
+            <label for="tea-cost-date">Çay Ücreti ve Tarihi:</label>
+            <input type="text" id="tea-cost-date" placeholder="Ücret ve tarih">
+            <button onclick="updateTeaCostDate()">Güncelle</button>
         </div>
     </div>
     <script src="../static/js/script.js"></script>
