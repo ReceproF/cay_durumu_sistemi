@@ -51,4 +51,10 @@ function updateDisplay() {
     document.getElementById('tea-packages').innerText =
         localStorage.getItem('teaPackages') || "Bilgi yok";
     document.getElementById('tea-times').innerText =
-        localStorage
+        localStorage.getItem('teaTimes') || "Bilgi yok";
+    document.getElementById('tea-cost-date').innerText =
+        localStorage.getItem('teaCostDate') || "Bilgi yok";
+}
+
+// Sayfa yüklendiğinde verileri güncelle
+window.onload = updateDisplay;
