@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Yönetim Paneli</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Yönetim Paneli</h1>
+        
+        <!-- Çay Durum Yönetimi -->
+        <div class="section">
+            <h2>Çay Durum Yönetimi</h2>
+            <button onclick="setTeaStatus('Çay Hazır!')">Çay Hazır!</button>
+            <button onclick="setTeaStatus('Çay Hazır Değil!')">Çay Hazır Değil!</button>
+            <button onclick="setTeaStatus('Çay Bitmek Üzere!')">Çay Bitmek Üzere!</button>
+            <button onclick="setTeaStatus('Çay Bitti!')">Çay Bitti!</button>
+            <div class="timer-buttons">
+                <p>Geri Sayım:</p>
+                <button onclick="setTeaCountdown(5)">5 Dakika</button>
+                <button onclick="setTeaCountdown(10)">10 Dakika</button>
+                <button onclick="setTeaCountdown(15)">15 Dakika</button>
+                <button onclick="setTeaCountdown(20)">20 Dakika</button>
+                <button onclick="setTeaCountdown(25)">25 Dakika</button>
+                <button onclick="setTeaCountdown(30)">30 Dakika</button>
+                <button onclick="setTeaCountdown(35)">35 Dakika</button>
+            </div>
+        </div>
+
+        <!-- Su Durum Yönetimi -->
+        <div class="section">
+            <h2>Su Durum Yönetimi</h2>
+            <button onclick="setWaterStatus('Su Hazır!')">Su Hazır!</button>
+            <div class="timer-buttons">
+                <p>Geri Sayım:</p>
+                <button onclick="setWaterCountdown(5)">5 Dakika</button>
+                <button onclick="setWaterCountdown(10)">10 Dakika</button>
+                <button onclick="setWaterCountdown(15)">15 Dakika</button>
+                <button onclick="setWaterCountdown(20)">20 Dakika</button>
+                <button onclick="setWaterCountdown(25)">25 Dakika</button>
+                <button onclick="setWaterCountdown(30)">30 Dakika</button>
+                <button onclick="setWaterCountdown(35)">35 Dakika</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
