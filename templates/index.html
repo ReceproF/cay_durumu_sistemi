@@ -1,41 +1,24 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="tr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Çay ve Su Durumu</title>
-    <link rel="stylesheet" href="../static/css/style.css">
+    <title>Çay Durumu</title>
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <div class="container">
-        <h1>Çay ve Su Durumu</h1>
+    <h1>Çay ve Su Durumu</h1>
+    <div id="tea-info">Çay Durumu: <span id="tea-info"></span></div>
+    <div id="water-info">Su Durumu: <span id="water-info"></span></div>
+    <div id="tea-timer">Çay Geri Sayım: <span id="tea-timer"></span></div>
+    <div id="water-timer">Su Geri Sayım: <span id="water-timer"></span></div>
 
-        <div class="top-section">
-            <div class="status-box" id="tea-status">
-                <h2>Çay Durumu</h2>
-                <p id="tea-info">Durum yükleniyor...</p>
-            </div>
-            <div class="status-box" id="water-status">
-                <h2>Su Durumu</h2>
-                <p id="water-info">Durum yükleniyor...</p>
-            </div>
-        </div>
+    <!-- Ek bilgiler -->
+    <h2>Ek Bilgiler</h2>
+    <div id="tea-packages-info">Çay Paket Sayısı: <span id="tea-packages-info"></span></div>
+    <div id="tea-times-info">Muhtemel Çay Saatleri: <span id="tea-times-info"></span></div>
+    <div id="tea-cost-date-info">Çay Ücreti ve Tarihi: <span id="tea-cost-date-info"></span></div>
 
-        <div class="bottom-section">
-            <div class="info-box">
-                <h3>Mevcut Çay Paket Sayısı:</h3>
-                <p id="tea-packages">Bilgi yok</p>
-            </div>
-            <div class="info-box">
-                <h3>Muhtemel Çay Saatleri:</h3>
-                <p id="tea-times">Bilgi yok</p>
-            </div>
-            <div class="info-box">
-                <h3>Çay Ücreti ve Toplanma Tarihi:</h3>
-                <p id="tea-cost-date">Bilgi yok</p>
-            </div>
-        </div>
-    </div>
-    <script src="../static/js/script.js"></script>
+    <script src="script.js"></script>
 </body>
 </html>
