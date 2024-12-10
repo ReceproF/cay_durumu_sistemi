@@ -3,8 +3,8 @@ from flask import Flask, request, jsonify, render_template
 
 app = Flask(__name__)
 
-# Global Variables
-tea_ready = False
+# Global Variables (sunucu tarafında tutulan veriler)
+tea_ready = "Çay Hazır Değil"
 water_timer = 0
 tea_stock = "10"
 tea_times = "10:00, 14:00, 16:00"
