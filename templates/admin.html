@@ -1,44 +1,48 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="tr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Paneli</title>
-    <link rel="stylesheet" href="../static/css/style.css">
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <div class="container">
-        <h1>Admin Paneli</h1>
-        <form id="updateForm">
-            <label for="teaStatus">Çay Durumu:</label>
-            <select id="teaStatus">
-                <option value="Çay hazır">Çay hazır</option>
-                <option value="Çay değil">Çay değil</option>
-            </select>
-            <br><br>
+    <h1>Çay Durumu Güncelle</h1>
+    
+    <label for="tea-status">Çay Durumu:</label>
+    <select id="tea-status">
+        <option value="Çay hazır">Çay hazır</option>
+        <option value="Çay değil">Çay değil</option>
+    </select>
 
-            <label for="waterStatus">Su Durumu:</label>
-            <select id="waterStatus">
-                <option value="Su var">Su var</option>
-                <option value="Su yok">Su yok</option>
-            </select>
-            <br><br>
+    <label for="tea-timer">Çay Zamanı (dakika):</label>
+    <input type="number" id="tea-timer" min="1" max="60">
+    
+    <button onclick="updateTeaStatus()">Çay Durumunu Güncelle</button>
 
-            <label for="teaPackages">Çay Paket Sayısı:</label>
-            <input type="number" id="teaPackages" min="0">
-            <br><br>
+    <label for="water-status">Su Durumu:</label>
+    <select id="water-status">
+        <option value="Su hazır">Su hazır</option>
+        <option value="Su değil">Su değil</option>
+    </select>
 
-            <label for="teaTimes">Muhtemel Çay Saatleri:</label>
-            <input type="text" id="teaTimes">
-            <br><br>
+    <label for="water-timer">Su Zamanı (dakika):</label>
+    <input type="number" id="water-timer" min="1" max="60">
+    
+    <button onclick="updateWaterStatus()">Su Durumunu Güncelle</button>
 
-            <label for="teaCostDate">Çay Ücreti ve Toplanma Tarihi:</label>
-            <input type="text" id="teaCostDate">
-            <br><br>
+    <h2>Ek Bilgiler Güncelle</h2>
+    <label for="tea-packages">Çay Paket Sayısı:</label>
+    <input type="number" id="tea-packages" value="0">
 
-            <button type="submit">Güncelle</button>
-        </form>
-    </div>
-    <script src="../static/js/admin.js"></script>
+    <label for="tea-times">Muhtemel Çay Saatleri:</label>
+    <input type="text" id="tea-times" value="08:00, 14:00, 18:00">
+
+    <label for="tea-cost-date">Çay Ücreti ve Tarihi:</label>
+    <input type="text" id="tea-cost-date" value="2 TL, 2024-12-01">
+
+    <button onclick="updateAllInfo()">Tüm Bilgileri Güncelle</button>
+
+    <script src="admin.js"></script>
 </body>
 </html>
