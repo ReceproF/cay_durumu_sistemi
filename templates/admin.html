@@ -11,14 +11,26 @@
         <h1>Yönetim Paneli</h1>
         <div class="admin-section">
             <h2>Çay Durumu</h2>
-            <button onclick="setTeaStatus('Çay Hazır!')">Çay Hazır!</button>
-            <button onclick="setTeaStatus('Çay Hazır Değil!')">Çay Hazır Değil!</button>
-            <button onclick="setTeaStatus('Çay Bitmek Üzere!')">Çay Bitmek Üzere!</button>
-            <button onclick="setTeaStatus('Çay Bitti!')">Çay Bitti!</button>
+            <button onclick="setTeaStatus('Çay Hazır!', 0)">Çay Hazır!</button>
+            <button onclick="setTeaStatus('Çay Hazır Değil!', 0)">Çay Hazır Değil!</button>
+            <button onclick="setTeaStatus('Çay Bitmek Üzere!', 0)">Çay Bitmek Üzere!</button>
+            <button onclick="setTeaStatus('Çay Bitti!', 0)">Çay Bitti!</button>
+            <div class="timer-buttons">
+                <button onclick="setTeaTimer(5)">5 Dakika</button>
+                <button onclick="setTeaTimer(10)">10 Dakika</button>
+                <button onclick="setTeaTimer(15)">15 Dakika</button>
+                <button onclick="setTeaTimer(20)">20 Dakika</button>
+            </div>
         </div>
         <div class="admin-section">
             <h2>Su Durumu</h2>
-            <button onclick="setWaterStatus('Su Hazır!')">Su Hazır!</button>
+            <button onclick="setWaterStatus('Su Hazır!', 0)">Su Hazır!</button>
+            <div class="timer-buttons">
+                <button onclick="setWaterTimer(5)">5 Dakika</button>
+                <button onclick="setWaterTimer(10)">10 Dakika</button>
+                <button onclick="setWaterTimer(15)">15 Dakika</button>
+                <button onclick="setWaterTimer(20)">20 Dakika</button>
+            </div>
         </div>
     </div>
     <script src="../static/js/script.js"></script>
