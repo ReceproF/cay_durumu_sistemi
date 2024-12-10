@@ -1,67 +1,59 @@
 // Çay Durumu ve Sayaç
 function setTeaStatus(status, timer = 0) {
-    fetch('/update-status', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-            tea_ready: status
-        })
-    }).then(response => response.json())
-      .then(data => {
-          alert("Çay durumu güncellendi: " + status);
-          updateDisplay(); // Ekranı güncelle
-      });
+    localStorage.setItem('teaStatus', status);
+    localStorage.setItem('teaTimer', timer);
+    alert("Çay durumu güncellendi: " + status);
+    updateDisplay();
+}
+
+function setTeaTimer(minutes) {
+    const endTime = new Date().getTime() + minutes * 60000;
+    localStorage.setItem('teaTimerEnd', endTime);
+    alert("Çay için geri sayım başladı: " + minutes + " dakika.");
 }
 
 // Su Durumu ve Sayaç
 function setWaterStatus(status, timer = 0) {
-    fetch('/update-water-status', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-            water_timer: timer
-        })
-    }).then(response => response.json())
-      .then(data => {
-          alert("Su durumu güncellendi: " + status);
-          updateDisplay(); // Ekranı güncelle
-      });
+    localStorage.setItem('waterStatus', status);
+    localStorage.setItem('waterTimer', timer);
+    alert("Su durumu güncellendi: " + status);
+    updateDisplay();
 }
 
 // Ek Bilgiler
 function updateTeaPackages() {
     const value = document.getElementById('tea-packages').value;
-    fetch('/update-footer', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-            tea_stock: value,
-            tea_times: document.getElementById('tea-times').value,
-            tea_money: document.getElementById('tea-cost-date').value
-        })
-    }).then(response => response.json())
-      .then(data => {
-          alert("Mevcut Çay Paket Sayısı güncellendi!");
-          updateDisplay(); // Ekranı güncelle
-      });
+    localStorage.setItem('teaPackages', value);
+    alert("Mevcut Çay Paket Sayısı güncellendi!");
 }
 
+function updateTeaTimes() {
+    const value = document.getElementById('tea-times').value;
+    localStorage.setItem('teaTimes', value);
+    alert("Muhtemel Çay Saatleri güncellendi!");
+}
+
+function updateTeaCostDate() {
+    const value = document.getElementById('tea-cost-date').value;
+    localStorage.setItem('teaCostDate', value);
+    alert("Çay Ücreti ve Tarihi güncellendi!");
+}
+
+// Ekranı Güncelle
 function updateDisplay() {
-    fetch('/status')
-        .then(response => response.json())
-        .then(data => {
-            document.getElementById('tea-info').innerText = data.tea_ready || "Durum ayarlanmadı.";
-            document.getElementById('water-info').innerText = data.water_timer || "Durum ayarlanmadı.";
-            document.getElementById('tea-packages').innerText = data.tea_stock || "Bilgi yok";
-            document.getElementById('tea-times').innerText = data.tea_times || "Bilgi yok";
-            document.getElementById('tea-cost-date').innerText = data.tea_money || "Bilgi yok";
-        });
+    // Çay ve su bilgilerini göster
+    document.getElementById('tea-info').innerText =
+        localStorage.getItem('teaStatus') || "Durum ayarlanmadı.";
+    document.getElementById('water-info').innerText =
+        localStorage.getItem('waterStatus') || "Durum ayarlanmadı.";
+
+    // Ek bilgiler
+    document.getElementById('tea-packages').innerText =
+        localStorage.getItem('teaPackages') || "Bilgi yok";
+    document.getElementById('tea-times').innerText =
+        localStorage.getItem('teaTimes') || "Bilgi yok";
+    document.getElementById('tea-cost-date').innerText =
+        localStorage.getItem('teaCostDate') || "Bilgi yok";
 }
 
 // Sayfa yüklendiğinde verileri güncelle
