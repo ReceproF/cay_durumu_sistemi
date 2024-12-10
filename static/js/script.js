@@ -1,56 +1,22 @@
-// Yönetim fonksiyonları
+// Çay Durumu Ayarla
 function setTeaStatus(status) {
     localStorage.setItem('teaStatus', status);
-    alert('Çay durumu güncellendi!');
+    alert("Çay durumu güncellendi: " + status);
 }
 
-function setTeaCountdown(minutes) {
-    const countdownTime = new Date().getTime() + minutes * 60000;
-    localStorage.setItem('teaCountdown', countdownTime);
-    alert('Çay geri sayımı başlatıldı!');
-}
-
+// Su Durumu Ayarla
 function setWaterStatus(status) {
     localStorage.setItem('waterStatus', status);
-    alert('Su durumu güncellendi!');
+    alert("Su durumu güncellendi: " + status);
 }
 
-function setWaterCountdown(minutes) {
-    const countdownTime = new Date().getTime() + minutes * 60000;
-    localStorage.setItem('waterCountdown', countdownTime);
-    alert('Su geri sayımı başlatıldı!');
+// Kullanıcı Sayfası İçin Durumları Yükle
+if (document.getElementById('tea-info')) {
+    const teaStatus = localStorage.getItem('teaStatus') || "Durum ayarlanmadı.";
+    document.getElementById('tea-info').innerText = teaStatus;
 }
 
-// Kullanıcı sayfası fonksiyonları
-function updateStatuses() {
-    const teaStatus = localStorage.getItem('teaStatus') || 'Bilinmiyor';
-    const waterStatus = localStorage.getItem('waterStatus') || 'Bilinmiyor';
-
-    const teaMessage = document.getElementById('tea-message');
-    const waterMessage = document.getElementById('water-message');
-
-    teaMessage.textContent = teaStatus;
-    waterMessage.textContent = waterStatus;
-
-    // Geri sayım
-    const teaCountdown = localStorage.getItem('teaCountdown');
-    if (teaCountdown) {
-        const remainingTime = Math.max(0, Math.ceil((teaCountdown - new Date().getTime()) / 60000));
-        teaMessage.textContent += ` (Çayın olmasına ${remainingTime} dakika kaldı.)`;
-    }
-
-    const waterCountdown = localStorage.getItem('waterCountdown');
-    if (waterCountdown) {
-        const remainingTime = Math.max(0, Math.ceil((waterCountdown - new Date().getTime()) / 60000));
-        waterMessage.textContent += ` (Suyun kaynamasına ${remainingTime} dakika kaldı.)`;
-    }
-
-    // Renkler
-    document.getElementById('tea-status').className = `status-box ${teaStatus.includes('Hazır') ? 'green' : 'red'}`;
-    document.getElementById('water-status').className = `status-box ${waterStatus.includes('Hazır') ? 'green' : 'red'}`;
-}
-
-// Sayfa yüklendiğinde durumları güncelle
-if (document.getElementById('tea-status')) {
-    setInterval(updateStatuses, 1000);
+if (document.getElementById('water-info')) {
+    const waterStatus = localStorage.getItem('waterStatus') || "Durum ayarlanmadı.";
+    document.getElementById('water-info').innerText = waterStatus;
 }
